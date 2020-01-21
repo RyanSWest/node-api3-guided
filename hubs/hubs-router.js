@@ -2,8 +2,7 @@ const express = require('express');
 
 const Hubs = require('./hubs-model.js');
 const Messages = require('../messages/messages-model.js');
-
-const router = express.Router();
+ const router = express.Router();
 
 // this only runs if the url has /api/hubs in it
 router.get('/', (req, res) => {
@@ -20,24 +19,28 @@ router.get('/', (req, res) => {
   });
 });
 
+
 // /api/hubs/:id
 
-router.get('/:id', (req, res) => {
-  Hubs.findById(req.params.id)
-  .then(hub => {
-    if (hub) {
-      res.status(200).json(hub);
-    } else {
-      res.status(404).json({ message: 'Hub not found' });
-    }
-  })
-  .catch(error => {
-    // log error to server
-    console.log(error);
-    res.status(500).json({
-      message: 'Error retrieving the hub',
-    });
-  });
+router.get('/:id', validateId, (req, res) => {
+
+
+  res.status(200).json(req.body)
+  // Hubs.findById(req.params.id)
+  // .then(hub => {
+  //   if (hub) {
+  //     res.status(200).json(hub);
+  //   } else {
+  //     res.status(404).json({ message: 'Hub not found' });
+  //   }
+  // })
+  // .catch(error => {
+  //   // log error to server
+  //   console.log(error);
+  //   res.status(500).json({
+  //     message: 'Error retrieving the hub',
+  //   });
+  // });
 });
 
 router.post('/', (req, res) => {
@@ -122,5 +125,12 @@ router.post('/:id/messages', (req, res) => {
     });
   });
 });
+
+function errorHandler(error, req,res, next){
+  console.log(error)
+}
+
+
+
 
 module.exports = router;
